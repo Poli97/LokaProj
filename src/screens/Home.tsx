@@ -1,97 +1,55 @@
-import React, {type PropsWithChildren} from 'react';
-import {
-  Button,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import React from 'react';
+import {Button, FlatList, SafeAreaView, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchUsers} from '../redux/actions/user';
-import {IReducerState} from '../redux/reducers';
-
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+import {clearAll, fetchUserById, fetchUsers} from '../redux/actions/user';
+import {combinedAppState} from '../redux/reducers';
 
 const Home = () => {
-  const isDarkMode = useColorScheme() === 'dark';
   const dispatch = useDispatch();
+  const users = useSelector(
+    (state: combinedAppState) => state.userReducer.users,
+  );
+  const userById = useSelector(
+    (state: combinedAppState) => state.userReducer.userById,
+  );
+  const loading = useSelector(
+    (state: combinedAppState) => state.userReducer.loading,
+  );
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  const users = useSelector((state: IReducerState) => state.userReducer.users);
-  console.log(users);
-
-  const pressed = () => {
-    console.log('PRessed');
+  const pressedGetList = () => {
+    console.log('pressedGetList', users);
     dispatch(fetchUsers());
+    console.log(users);
   };
+
+  const pressedGetById = () => {
+    console.log('pressedGetById', userById);
+    dispatch(fetchUserById('1'));
+    console.log('pressedGetById', userById);
+  };
+
+  const pressedClearAll = () => {
+    console.log('pressedClearAll');
+    dispatch(clearAll());
+  };
+
+  const renderUser = (user: string) => <Text>{user}</Text>;
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView>
       <Text>PROVA</Text>
-      <Button title="Premi" onPress={pressed} />
+      <Button title="Get List" onPress={pressedGetList} />
+      {loading && <Text>Caricando</Text>}
+      {!loading && users.length > 0 && (
+        <FlatList data={users} renderItem={item => renderUser(item.item)} />
+      )}
+
+      <Button title="GetByID" onPress={pressedGetById} />
+      {!loading && userById && <Text>{userById}</Text>}
+
+      <Button title="ClearAll" onPress={pressedClearAll} />
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default Home;

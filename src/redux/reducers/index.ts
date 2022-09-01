@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 import userReducer, {userState} from './user';
 
-export interface IReducerState {
+export interface combinedAppState {
   userReducer: userState;
 }
 
