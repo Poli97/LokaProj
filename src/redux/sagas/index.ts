@@ -1,6 +1,6 @@
 import {spawn} from '@redux-saga/core/effects';
-import {watchUserSaga} from './user';
+import {watchRedditSaga} from './reddit';
 
 export default function* rootSaga() {
-  yield spawn(watchUserSaga);
+  yield spawn(watchRedditSaga);
 }

@@ -1,20 +1,7 @@
-import {userActionTypes} from '../actionTypes/user';
+import {userActionTypes} from '../actionTypes/reddit';
 
-export function fetchUsers() {
+export function fetchRedditList() {
   return {
-    type: userActionTypes.GET_USERS,
-  };
-}
-
-export function fetchUserById(id: string) {
-  return {
-    type: userActionTypes.GET_USER_BY_ID,
-    payload: id,
-  };
-}
-
-export function clearAll() {
-  return {
-    type: userActionTypes.CLEAR_ALL,
+    type: userActionTypes.GET_REDDIT_LIST,
   };
 }

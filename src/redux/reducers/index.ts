@@ -1,12 +1,12 @@
 import {combineReducers} from 'redux';
-import userReducer, {userState} from './user';
+import redditReducer, {userState} from './reddit';
 
 export interface combinedAppState {
-  userReducer: userState;
+  redditReducer: userState;
 }
 
 const rootReducer = combineReducers({
-  userReducer,
+  redditReducer,
 });
 
 export default rootReducer;
